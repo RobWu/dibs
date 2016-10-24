@@ -51,7 +51,6 @@ module Dibs
         currency: '',
         orderId: '',
         textreply: true,
-        capturenow: "yes",
         test: test
       }.merge(opts)
       opts.symbolize_keys!
