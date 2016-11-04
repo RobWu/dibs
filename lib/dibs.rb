@@ -58,7 +58,7 @@ module Dibs
       md5 = "#{@key1}merchant=#{@merchant}&orderid=#{opts[:orderId]}&currency=#{opts[:currency]}&amount=#{opts[:amount]}"
       opts[:md5key]=calculate_md5(md5)
       endpoint = '/cgi-ssl/ticket_auth.cgi'
-      res = do_http_post(opts, endpoint)
+      res = do_http_post(opts, endpoint, false)
       ::Dibs::Results::Authorize.new(res.body)
     end
 
@@ -122,7 +122,7 @@ module Dibs
     end
 
     private
-      def do_http_post(opts, endpoint)
+      def do_http_post(opts, endpoint, support_postype = true)
         if opts[:test]
           opts[:test] = 'yes'
         else
@@ -130,7 +130,7 @@ module Dibs
         end
         opts[:textreply] = 'yes'
         opts[:fullreply] = 'yes'
-        opts[:postype] = 'ssl'
+        opts[:postype] = 'ssl' if support_postype
         uri = URI("#{@@server}#{endpoint}")
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
